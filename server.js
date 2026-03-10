@@ -1,6 +1,5 @@
-const express = require("express")
-const cors = require("cors")
-const fetch = require("node-fetch")
+import express from "express"
+import cors from "cors"
 
 const app = express()
 
@@ -10,7 +9,7 @@ app.use(express.json())
 const PORT = process.env.PORT || 10000
 
 app.get("/", (req,res)=>{
-res.send("Judge server running")
+res.send("Polyhedron Judge Online")
 })
 
 app.post("/ask", async (req,res)=>{
@@ -32,7 +31,7 @@ model:"gpt-4o-mini",
 messages:[
 {
 role:"system",
-content:"You are a Magic the Gathering rules judge. Give short precise rulings."
+content:"You are a Magic the Gathering rules judge. Give short accurate rulings and reference rules when possible."
 },
 {
 role:"user",
@@ -51,8 +50,7 @@ data.choices?.[0]?.message?.content ||
 
 res.json({answer})
 
-}
-catch(err){
+}catch(err){
 
 console.log(err)
 
@@ -65,5 +63,5 @@ answer:"Judge server error"
 })
 
 app.listen(PORT,()=>{
-console.log("Judge server running on port "+PORT)
+console.log("Judge server running")
 })
