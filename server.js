@@ -4,6 +4,13 @@ import fetch from "node-fetch";
 const app = express();
 app.use(express.json());
 
+/* Allow requests from your GitHub Pages site */
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 const PORT = process.env.PORT || 3000;
 
 let requests = [];
