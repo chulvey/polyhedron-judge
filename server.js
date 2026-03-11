@@ -47,10 +47,6 @@ Question: ${question}`
       answer = data.output[0].content[0].text
     }
 
-    else if (data.output?.[0]?.content?.[0]?.value) {
-      answer = data.output[0].content[0].value
-    }
-
     res.json({ answer })
 
   } catch (err) {
