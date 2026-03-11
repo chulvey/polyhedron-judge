@@ -2,10 +2,15 @@ import express from "express"
 import cors from "cors"
 
 const app = express()
+
 app.use(cors())
 app.use(express.json())
 
 const PORT = process.env.PORT || 10000
+
+app.get("/", (req, res) => {
+  res.send("Polyhedron Judge Online")
+})
 
 app.post("/ask", async (req, res) => {
 
@@ -16,14 +21,14 @@ app.post("/ask", async (req, res) => {
     const response = await fetch(
       "https://api.openai.com/v1/responses",
       {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "Authorization":`Bearer ${process.env.OPENAI_API_KEY}`
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
         },
-        body:JSON.stringify({
-          model:"gpt-4o-mini",
-          input:`You are a Magic the Gathering rules judge. Answer clearly and briefly.
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          input: `You are a Magic the Gathering rules judge. Answer clearly and briefly with correct rules interactions.
 
 Question: ${question}`
         })
@@ -33,6 +38,7 @@ Question: ${question}`
     const data = await response.json()
 
     const answer =
+      data.output_text ||
       data?.output?.[0]?.content?.[0]?.text ||
       "Judge could not determine the answer."
 
@@ -40,9 +46,11 @@ Question: ${question}`
 
   } catch (err) {
 
-    console.log(err)
+    console.error(err)
 
-    res.json({ answer: "Judge server error" })
+    res.json({
+      answer: "Judge server error"
+    })
 
   }
 
