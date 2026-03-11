@@ -39,6 +39,9 @@ Question: ${question}`
 
     const data = await response.json();
 
+    // SAFE DEBUG LINE (does not change behavior)
+    console.log(JSON.stringify(data, null, 2));
+
     let answer = "Judge could not determine the answer.";
 
     if (data.output_text) {
