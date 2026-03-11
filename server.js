@@ -28,7 +28,7 @@ app.post("/ask", async (req, res) => {
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
-          input: `You are a Magic the Gathering rules judge. Answer clearly and briefly with correct rules interactions.
+          input: `You are a Magic the Gathering rules judge. Answer clearly and briefly.
 
 Question: ${question}`
         })
@@ -37,10 +37,19 @@ Question: ${question}`
 
     const data = await response.json()
 
-    const answer =
-      data.output_text ||
-      data?.output?.[0]?.content?.[0]?.text ||
-      "Judge could not determine the answer."
+    let answer = "Judge could not determine the answer."
+
+    if (data.output_text) {
+      answer = data.output_text
+    }
+
+    else if (data.output?.[0]?.content?.[0]?.text) {
+      answer = data.output[0].content[0].text
+    }
+
+    else if (data.output?.[0]?.content?.[0]?.value) {
+      answer = data.output[0].content[0].value
+    }
 
     res.json({ answer })
 
